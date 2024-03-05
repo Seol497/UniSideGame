@@ -7,6 +7,10 @@ TagManager:
   - Enemy
   - Goal
   - Dead
+  - SpeedUp
+  - SpeedDown
+  - DoubleJump
+  - Coin
   layers:
   - Default
   - TransparentFX
