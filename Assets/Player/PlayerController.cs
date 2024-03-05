@@ -5,7 +5,8 @@ using UnityEngine;
 
 public enum GameState
 {
-    playing,gameclear,gameover
+    // 2024-02-29 상태 추가(게임 끝)
+    playing,gameclear,gameover, gameend
 }
 
 
@@ -32,7 +33,9 @@ public class PlayerController : MonoBehaviour
     string oldAnime = "";
     #endregion
 
-    public string gameState = Enum.GetName(typeof(GameState), 0); // 숫자만 바꾸면 그 숫자에 해당하는 enum의 이름이 적용됩니다.
+    public static string gameState = Enum.GetName(typeof(GameState), 0); // 숫자만 바꾸면 그 숫자에 해당하는 enum의 이름이 적용됩니다.
+
+    public int score = 0; // 플레이어가 흭득할 점수
 
 
     // Start is called before the first frame update
@@ -151,6 +154,18 @@ public class PlayerController : MonoBehaviour
         {
             GameOver();
         }
+        else if (collision.gameObject.tag == "SpeedUp")
+        {
+            speed *= 2.5f;
+            Destroy(collision.gameObject);
+        }
+        else if (collision.gameObject.tag == "Coin")
+        {
+            var itemData = collision.gameObject.GetComponent<ItemData>();
+            score += 10;  //itemData.value;
+            Debug.Log($"흭득한 점수 ={score}");
+            Destroy(collision.gameObject);
+        }
     }
 
     public void Goal()
@@ -168,7 +183,7 @@ public class PlayerController : MonoBehaviour
         // 더이상 충돌을 하지 않도록 충돌 판정을 해제합니다.
         GetComponent<CapsuleCollider2D>().enabled = false;
         // 플레이어가 위로 튀어오르게 설계합니다.
-        rbody.AddForce(new Vector2(0, 13), ForceMode2D.Impulse);
+        rbody.AddForce(new Vector2(0, 8), ForceMode2D.Impulse);
     }
 
     public void GameStop()
